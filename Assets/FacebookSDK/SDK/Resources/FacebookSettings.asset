@@ -15,9 +15,9 @@ MonoBehaviour:
   clientTokens:
   - 
   appIds:
-  - 0
+  - 424943405037425
   appLabels:
-  - App Name
+  - FireBaseAuth
   cookie: 1
   logging: 1
   status: 1

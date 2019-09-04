@@ -8,6 +8,7 @@ public class TestAuth : MonoBehaviour
 {
 	void Awake ()
 	{
+		//fb初始化
 		if (!FB.IsInitialized) {
 			// Initialize the Facebook SDK
 			FB.Init(InitCallback, OnHideUnity);
@@ -52,29 +53,22 @@ public class TestAuth : MonoBehaviour
 	{
 		
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 
-	public void FaceBookLogin(FacebookDelegate<ILoginResult> loginResult)
-	{
-		//FB登录拿token
-		var perms = new List<string>(){"public_profile", "email"};
-		FB.LogInWithReadPermissions(perms, loginResult);
-	}
+
+
 	
 
 	public void FaceBookAuth()
 	{
-		
-		FaceBookLogin(delegate(ILoginResult result)
+		//FB登录拿token
+		var perms = new List<string>(){"public_profile", "email"};
+		FB.LogInWithReadPermissions(perms, delegate(ILoginResult result)
 		{
 			if (FB.IsLoggedIn) {
 				// AccessToken class will have session details
 				var aToken = Facebook.Unity.AccessToken.CurrentAccessToken;
 					
+				//拿到fb token 认证
 				//FireBase Auth
 				AuthWithFacebook(aToken.TokenString);
 				
@@ -87,6 +81,33 @@ public class TestAuth : MonoBehaviour
 			} else {
 				Debug.Log("User cancelled login");
 			}
+		});
+	}
+
+	public void GoogleAuth()
+	{
+		
+	}
+
+	private void AuthWithGoogle(string googleIdToken,string googleAccessToken)
+	{
+		Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
+		
+		Firebase.Auth.Credential credential =
+			Firebase.Auth.GoogleAuthProvider.GetCredential(googleIdToken, googleAccessToken);
+		auth.SignInWithCredentialAsync(credential).ContinueWith(task => {
+			if (task.IsCanceled) {
+				Debug.LogError("SignInWithCredentialAsync was canceled.");
+				return;
+			}
+			if (task.IsFaulted) {
+				Debug.LogError("SignInWithCredentialAsync encountered an error: " + task.Exception);
+				return;
+			}
+
+			Firebase.Auth.FirebaseUser newUser = task.Result;
+			Debug.LogFormat("User signed in successfully: {0} ({1})",
+				newUser.DisplayName, newUser.UserId);
 		});
 	}
 
