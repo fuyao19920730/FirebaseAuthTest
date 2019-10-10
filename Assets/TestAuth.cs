@@ -3,11 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using Facebook.Unity;
 using UnityEngine;
+using System.Runtime.InteropServices;
+
 
 public class TestAuth : MonoBehaviour
 {
-	void Awake ()
+    //调用原生的方法
+    [DllImport("__Internal")]
+    private static extern void GoogleSignIn();
+
+    [DllImport("__Internal")]
+    private static extern void GoogleInit();
+
+
+    void Awake ()
 	{
+        //todo:初始化google
+
+
 		//fb初始化
 		if (!FB.IsInitialized) {
 			// Initialize the Facebook SDK
@@ -86,8 +99,11 @@ public class TestAuth : MonoBehaviour
 
 	public void GoogleAuth()
 	{
-		
-	}
+        //todo:google sign in 
+        GoogleSignIn();
+
+        //todo:授权到firebase
+    }
 
 	private void AuthWithGoogle(string googleIdToken,string googleAccessToken)
 	{

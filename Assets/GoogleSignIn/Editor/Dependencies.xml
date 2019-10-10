@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dependencies>
+    <androidPackages>
+    </androidPackages>
+    <iosPods>
+        <iosPod name="GoogleSignIn" />
+    </iosPods>
+</dependencies>
